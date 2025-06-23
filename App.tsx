@@ -1,11 +1,16 @@
-// ✅ 수정된 App.tsx
-import React from 'react';
+// App.tsx
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // Screens
+import LoginScreen from './components/Onboarding/LoginScreen';
+import StepOneScreen from './components/Onboarding/StepOneScreen';
+import StepTwoScreen from './components/Onboarding/StepTwoScreen';
+import CharacterIntroScreen from './components/Onboarding/CharacterIntroScreen';
 import HomeScreen from './components/HomeScreen';
 import ExploreScreen from './components/ExploreScreen';
 import CommunityHomeScreen from './components/CommunityHomeScreen';
@@ -19,16 +24,23 @@ import AlarmListScreen from './components/AlarmListScreen';
 import AlarmEditScreen from './components/AlarmEditScreen';
 import FriendListScreen from './components/FriendListScreen';
 import VideoPlayerScreen from './components/VideoPlayerScreen';
-import StepOneScreen from './components/Onboarding/StepOneScreen';
-import StepTwoScreen from './components/Onboarding/StepTwoScreen';
-import CharacterIntroScreen from './components/Onboarding/CharacterIntroScreen';
 
 const RootStack = createNativeStackNavigator();
+const OnboardingStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CommunityStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
 const ExploreStack = createNativeStackNavigator();
-const OnboardingStack = createNativeStackNavigator();
+
+function OnboardingStackScreen() {
+  return (
+    <OnboardingStack.Navigator screenOptions={{ headerShown: false }}>
+      <OnboardingStack.Screen name="StepOne" component={StepOneScreen} />
+      <OnboardingStack.Screen name="StepTwo" component={StepTwoScreen} />
+      <OnboardingStack.Screen name="CharacterIntro" component={CharacterIntroScreen} />
+    </OnboardingStack.Navigator>
+  );
+}
 
 function CommunityStackScreen() {
   return (
@@ -54,14 +66,14 @@ function CommunityStackScreen() {
 
 function SettingsStackScreen() {
   return (
-    <SettingsStack.Navigator>
-      <SettingsStack.Screen name="SettingsHome" component={SettingsScreen} options={{ title: '설정' }} />
-      <SettingsStack.Screen name="Profile" component={ProfileScreen} options={{ title: '계정' }} />
-      <SettingsStack.Screen name="Decorate" component={DecorateScreen} options={{ title: '개인정보 관리' }} />
+    <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
+      <SettingsStack.Screen name="SettingsHome" component={SettingsScreen} />
+      <SettingsStack.Screen name="Profile" component={ProfileScreen} />
+      <SettingsStack.Screen name="Decorate" component={DecorateScreen} />
       <SettingsStack.Screen name="MyList" component={MyListScreen} />
       <SettingsStack.Screen name="AlarmList" component={AlarmListScreen} />
       <SettingsStack.Screen name="AlarmEdit" component={AlarmEditScreen} />
-      <SettingsStack.Screen name="FriendList" component={FriendListScreen} options={{ title: '친구 목록' }} />
+      <SettingsStack.Screen name="FriendList" component={FriendListScreen} />
     </SettingsStack.Navigator>
   );
 }
@@ -88,7 +100,13 @@ function MainTabNavigator() {
 
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#2a8bff',
+        tabBarStyle: {
+          backgroundColor: '#d8ead8',
+          borderTopColor: '#e0e0e0',
+          height: 70,
+          paddingBottom: 6,
+        },
+        tabBarActiveTintColor: 'rgb(60, 93, 93)',
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
       })}
@@ -101,22 +119,31 @@ function MainTabNavigator() {
   );
 }
 
-function OnboardingStackScreen() {
-  return (
-    <OnboardingStack.Navigator screenOptions={{ headerShown: false }}>
-      <OnboardingStack.Screen name="StepOne" component={StepOneScreen} />
-      <OnboardingStack.Screen name="StepTwo" component={StepTwoScreen} />
-      <OnboardingStack.Screen name="CharacterIntro" component={CharacterIntroScreen} />
-    </OnboardingStack.Navigator>
-  );
-}
-
 export default function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
+      setUser(user);
+      if (initializing) setInitializing(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (initializing) return null;
+
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="Onboarding" component={OnboardingStackScreen} />
-        <RootStack.Screen name="Main" component={MainTabNavigator} />
+        {!user ? (
+          <RootStack.Screen name="Login" component={LoginScreen} />
+        ) : (
+          <>
+            <RootStack.Screen name="Onboarding" component={OnboardingStackScreen} />
+            <RootStack.Screen name="Main" component={MainTabNavigator} />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, } from 'react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -16,7 +10,8 @@ const borderImages = [
   require('../assets/border3.png'),
 ];
 
-export default function ProfileScreen() {
+
+export default function AccountScreen() {
   const navigation = useNavigation();
   const [borderIndex, setBorderIndex] = useState<number | null>(null);
   const [badge, setBadge] = useState<string>('꾸준함 장인');
@@ -30,97 +25,143 @@ export default function ProfileScreen() {
     };
     loadData();
   }, []);
-
+  
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>계정</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* 초록색 헤더 */}
+      <View style={styles.headerBar}>
+        <Text style={styles.headerText}>계정</Text>
       </View>
 
-      <View style={styles.profileSection}>
-        <View style={styles.borderWrapper}>
-          {borderIndex !== null && (
-            <Image source={borderImages[borderIndex]} style={styles.borderImage} />
-          )}
-          <Image source={require('../assets/penguin.png')} style={styles.avatar} />
+      <View style={styles.container}>
+        {/* 프로필 */}
+        <View style={styles.profileBox}>
+          <Image source={require('../assets/profile.png')} style={styles.avatar} />
+          <Text style={styles.label}>[꾸준함 장인]</Text>
+          <Text style={styles.name}>굽펭이</Text>
+          <Text style={styles.subtitle}>허리가 펴지는 그날까지...</Text>
         </View>
-        <Text style={styles.rank}>[{badge}]</Text>
-        <Text style={styles.nickname}>곰팽이</Text>
-        <Text style={styles.description}>허리가 펴지는 그날까지..</Text>
-      </View>
 
-      <View style={styles.menu}>
-        <TouchableOpacity onPress={() => navigation.navigate('Decorate')}>
-        <Text style={styles.menuTitle}>개인정보 수정 ✏️</Text>
-         </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('MyList')}>
-          <Text style={styles.menuTitle}>나만의 리스트 ✏️</Text>
+        {/* 수정 메뉴 */}
+        <View style={styles.infoRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('Decorate')}>
+          <Text style={styles.editItem}>개인정보 수정 ✏️</Text>
           </TouchableOpacity>
-       
-
-        <Text style={styles.sectionTitle}>모임 관리</Text>
-        <View style={styles.groupBox}>
-          <Text style={styles.groupLabel}>직장인들아 하루 5분만 스트레칭하자</Text>
-          <Text style={styles.leave}>모임 나가기</Text>
         </View>
-        <View style={styles.groupBox}>
-          <Text style={styles.groupLabel}>거북목탈각이 어려운 (14/50)</Text>
-          <Text style={styles.leave}>모임 나가기</Text>
+        <View style={styles.infoRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('MyList')}>
+          <Text style={styles.editItem}>나만의 리스트 ✏️</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 모임 관리 */}
+        <Text style={styles.sectionTitle}>모임 관리</Text>
+        <View style={styles.groupRow}>
+          <View style={styles.groupItem}>
+            <View style={styles.groupBox}>
+              <Text style={styles.groupText}>직장인들아! 하루 5분만 스트레칭하자</Text>
+            </View>
+            <Text style={styles.exitText}>모임 나가기</Text>
+          </View>
+
+          <View style={styles.groupItem}>
+            <View style={styles.groupBox}>
+              <Text style={styles.groupText}>거북목타파같이해요 (14/50)</Text>
+            </View>
+            <Text style={styles.exitText}>모임 나가기</Text>
+          </View>
         </View>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  header: {
+  headerBar: {
     backgroundColor: '#dff5e1',
-    paddingTop: 50,
-    paddingBottom: 20,
+    paddingTop: 40,
+    paddingBottom: 40,
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#111',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+  },
+  profileBox: {
     alignItems: 'center',
-  },
-  title: { fontSize: 24, fontWeight: 'bold' },
-  profileSection: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 30,
-  },
-  borderWrapper: {
-    position: 'relative',
-    width: 150,
-    height: 150,
-    marginBottom: 10,
-  },
-  borderImage: {
-    position: 'absolute',
-    width: 150,
-    height: 150,
-    resizeMode: 'contain',
+    marginBottom: 24,
   },
   avatar: {
     width: 150,
     height: 150,
     resizeMode: 'contain',
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    marginBottom: 1,
   },
-  rank: { color: '#5970f0', fontSize: 14, marginTop: 6 },
-  nickname: { fontSize: 20, fontWeight: 'bold', marginTop: 4 },
-  description: { fontSize: 13, color: '#444', marginTop: 4 },
-
-  menu: { paddingHorizontal: 20 },
-  menuTitle: { fontSize: 16, fontWeight: 'bold', marginVertical: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: 'bold', marginTop: 20, marginBottom: 10 },
-
-  groupBox: {
-    backgroundColor: '#d8f3dc',
-    borderRadius: 10,
-    padding: 12,
+  label: {
+    fontSize: 12,
+    color: '#9b59b6',
+    marginBottom: 2,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 10,
   },
-  groupLabel: { fontSize: 14, color: '#1a452d', marginBottom: 4 },
-  leave: { fontSize: 12, color: '#d11', textDecorationLine: 'underline' },
+  subtitle: {
+    fontSize: 12,
+    color: '#555',
+    marginBottom: 30,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 36,
+    paddingHorizontal: 8,
+  },
+  editItem: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#111',
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 18,
+    marginBottom: 12,
+    color: '#111',
+  },
+  groupRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  groupItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  groupBox: {
+    backgroundColor: '#dff5e1',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    minHeight: 60,
+    justifyContent: 'center',
+  },
+  groupText: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  exitText: {
+    fontSize: 11,
+    color: '#d14c4c',
+    marginTop: 4,
+  },
 });

@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "157236263551",
+    "firebase_url": "https://app-nuul-default-rtdb.firebaseio.com",
+    "project_id": "app-nuul",
+    "storage_bucket": "app-nuul.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157236263551:android:f6cb9a54356abf61009d4a",
+        "android_client_info": {
+          "package_name": "com.nuul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9nnyp1G1eq64Av1Mo330iLG-mBV3bTAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157236263551:android:9ae0fce46d6ad7b1009d4a",
+        "android_client_info": {
+          "package_name": "com.nuul.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9nnyp1G1eq64Av1Mo330iLG-mBV3bTAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

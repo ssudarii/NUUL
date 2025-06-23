@@ -1,8 +1,9 @@
-// components/Onboarding/CharacterIntroScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { auth, db } from '../../firebaseConfig';
+import { doc, updateDoc } from 'firebase/firestore';
 
 type OnboardingStackParamList = {
   StepOne: undefined;
@@ -14,6 +15,26 @@ type OnboardingStackParamList = {
 const CharacterIntroScreen = () => {
   const [nickname, setNickname] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
+
+  const saveProfileAndNavigate = async () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+      Alert.alert('오류', '로그인이 필요합니다.');
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, 'users', user.uid), {
+        nickname: nickname.trim(),
+        character: 0, // 현재는 펭귄(0)으로 고정
+      });
+
+      navigation.navigate('Home');
+    } catch (error) {
+      Alert.alert('저장 실패', error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -27,13 +48,7 @@ const CharacterIntroScreen = () => {
         style={styles.input}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          // 저장 후 메인화면으로 이동
-          navigation.navigate('Main');
-        }}
-      >
+      <TouchableOpacity style={styles.button} onPress={saveProfileAndNavigate}>
         <Text style={styles.buttonText}>시작하기</Text>
       </TouchableOpacity>
 
@@ -46,8 +61,8 @@ export default CharacterIntroScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
-  title: { fontSize: 18, marginBottom: 16, textAlign: 'center' },
-  character: { width: 160, height: 160, marginBottom: 16 },
+  title: { fontSize: 18, marginBottom: 16, textAlign: 'center', fontWeight: 'bold' },
+  character: { width: 320, height: 320, marginBottom: 16 },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -57,11 +72,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#00B894',
+    backgroundColor: '#c7d9c7',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 8,
   },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
+  buttonText: { color: '#454545', fontWeight: 'bold' },
   page: { marginTop: 24, color: '#888' },
 });
+
+

@@ -1,8 +1,10 @@
 // components/Onboarding/StepTwoScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { auth, db } from '../../firebaseConfig';
+import { doc, updateDoc } from 'firebase/firestore';
 
 type OnboardingStackParamList = {
   StepOne: undefined;
@@ -11,19 +13,37 @@ type OnboardingStackParamList = {
   Home: undefined;
 };
 
-
 const StepTwoScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
 
+  const handleSelect = async (reason: string) => {
+    const user = auth.currentUser;
+    if (!user) {
+      Alert.alert('오류', '로그인이 필요합니다.');
+      return;
+    }
+
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        'survey.reason': reason,  // 설문 응답 저장
+      });
+
+      navigation.navigate('CharacterIntro');
+    } catch (error) {
+      Alert.alert('저장 오류', '설문 응답 저장에 실패했습니다.');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>어떤 목표로 걷고 싶으신가요?</Text>
+      <Text style={styles.title}>어떤 이유로 스트레칭을 하시나요?</Text>
 
-      {['건강', '다이어트', '습관', '통근', '자연산책'].map((goal) => (
+      {['통증 완화', '자세 교정', '운동 전/후 준비', '뻐근함 완화'].map((goal) => (
         <TouchableOpacity
           key={goal}
           style={styles.button}
-          onPress={() => navigation.navigate('CharacterIntro')}
+          onPress={() => handleSelect(goal)}
         >
           <Text style={styles.buttonText}>{goal}</Text>
         </TouchableOpacity>
@@ -40,19 +60,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFAFA',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 40,
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#a4d4ae',
+    backgroundColor: '#c7d9c7',
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 220,
   },
   buttonText: {
     color: '#000',
@@ -65,3 +91,4 @@ const styles = StyleSheet.create({
     color: '#aaa',
   },
 });
+

@@ -52,12 +52,36 @@ export default function AttendanceCalendar({ characterType }: AttendanceCalendar
       markedDates={markedDates}
       onDayPress={handleDayPress}
       style={{ borderRadius: 10, width: 380 }}
+
+       theme={{
+      'stylesheet.calendar.header': {
+        // 요일줄(월~일) 바 전체
+        week: {
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          backgroundColor: '#d8ead8',   // 연녹색 배경
+          paddingVertical: 4,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        },
+        // 모든 요일 기본 글자 스타일
+        dayHeader: {
+          fontWeight: '600',
+          fontSize: 14,
+          color: '#000',
+        },
+        // 특정 요일만 색 바꾸기 (0 = Sun, 6 = Sat)
+        dayTextAtIndex0: { color: 'red' },   // 일요일
+        dayTextAtIndex6: { color: 'red' },   // 토요일
+      },
+    }}
+  
       dayComponent={({ date }) => {
         const stamp = markedDates[date.dateString] ? characterStamps[characterType] : null;
         return (
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             {stamp ? (
-              <Image source={stamp} style={{ width: 24, height: 24 }} resizeMode="contain" />
+              <Image source={stamp} style={{ width: 30, height: 30,opacity: 0.9}} resizeMode="contain" />
             ) : (
               <Text>{date.day}</Text>
             )}

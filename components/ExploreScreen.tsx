@@ -25,71 +25,61 @@ const CARD_SIZE = (windowWidth - 24) / 2; // padding: 8 + 간격: 8 기준
 const items = [
    {
     id: '1',
-    title: '허리통증 완화',
     image: require('../assets/thumb1.png'),
     videoId: 'abiyAQu-Pf0',
   },
 
   {
     id: '2',
-    title: '거북목 스트레칭',
     image: require('../assets/thumb2.png'),
     videoId: 'zKJ7915100c',
   },
 
   {
     id: '3',
-    title: '어깨 통증 풀기',
     image: require('../assets/thumb3.png'),
     videoId: 'CkSLkHSdJjA',
   },
 
   {
     id: '4',
-    title: '앉아서 하는 스트레칭',
     image: require('../assets/thumb4.png'),
     videoId: '5fnEEzi_ev0',
   },
 
   {
     id: '5',
-    title: '손목 이완 스트레칭',
-    image: require('../assets/thumb2.png'),
+    image: require('../assets/thumb5.png'),
     videoId: 'CkSLkHSdJjA3',
   },
 
   {
     id: '6',
-    title: '전신 스트레칭 루틴',
-    image: require('../assets/thumb3.png'),
+    image: require('../assets/thumb6.png'),
     videoId: 'fCkSLkHSdJjA',
   },
 
   {
     id: '7',
-    title: '골반 교정 스트레칭',
-    image: require('../assets/thumb1.png'),
+    image: require('../assets/thumb7.png'),
     videoId: 'CkSLkHSdJjA',
   },
 
   {
     id: '8',
-    title: '아침 기상 스트레칭',
-    image: require('../assets/thumb5.png'),
+    image: require('../assets/thumb8.png'),
     videoId: 'CkSLkHSdJjA',
   },
 
   {
     id: '9',
-    title: '장시간 앉은 자세 해소',
-    image: require('../assets/thumb4.png'),
+    image: require('../assets/thumb9.png'),
     videoId: 'CkSLkHSdJjA',
   },
 
   {
     id: '10',
-    title: '수면 전 릴렉스 루틴',
-    image: require('../assets/thumb2.png'),
+    image: require('../assets/thumb10.png'),
     videoId: 'CkSLkHSdJjA',
   },
 
@@ -132,23 +122,13 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_SIZE,
     height: CARD_SIZE,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 8,
   },
   image: {
     width: '100%',
     height: '100%',
-  },
-  overlay: {
-    position: 'absolute',
-    bottom: 8,
-    left: 8,
-    right: 8,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    borderRadius: 6,
   },
   text: {
     color: '#fff',
